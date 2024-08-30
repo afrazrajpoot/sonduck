@@ -9,7 +9,7 @@ import { useGlobalContext } from "@/context/globalState";
 // import Loading from "../../Common/Loading";
 
 const CreatePasswordForm = () => {
-  const {setForgetModel} = useGlobalContext()
+  const { setForgetModel } = useGlobalContext();
   // const [id, setId] = useState("");
   // const {
   //   control,
@@ -23,7 +23,7 @@ const CreatePasswordForm = () => {
   // const [updatePassword, { isLoading, isError, isSuccess }] = useUpdatePasswordMutation();
 
   const onSubmit = async () => {
-    setForgetModel(true)
+    setForgetModel(true);
     // try {
     //   const formData = {
     //     oldPassword: data?.oldPassword,
@@ -82,10 +82,15 @@ const CreatePasswordForm = () => {
   // }, []);
   return (
     <main className="">
-      <h1 className="font-semibold sm:text-[3vw] lg:text-[1.5vw]">Create new Password</h1>
+      <h1 className="font-semibold sm:text-[3vw] lg:text-[1.5vw]">
+        Create new &apos;Password&apos;
+      </h1>
       <div className="mt-5">
         <form onSubmit={onSubmit} className="mt-[1.5vw]">
-          <p className="mb-[1vw] text-[4vw] sm:text-[2vw] lg:text-[1.2vw]">If you forgot your password, enter your email address by clicking on the button below and we'll send you an otp to create a new one.</p>
+          <p className="mb-[1vw] text-[4vw] sm:text-[2vw] lg:text-[1.2vw]">
+            If you forgot your password, enter your email address by clicking on the button below
+            and we&apos;ll send you an OTP to create a new one.
+          </p>
           {/* {createPasswordForm?.map((field, index) => (
             <div key={index} className="mb-5">
               <label
@@ -132,7 +137,7 @@ const CreatePasswordForm = () => {
             size="large"
             className="w-full mt-4 text-sm px-4 py-2 bg-[#FF387A] hover:bg-[#FF387A] text-white "
           >
-            Click on the button
+            &apos;Click on the button&apos;
           </Button>
         </form>
       </div>
