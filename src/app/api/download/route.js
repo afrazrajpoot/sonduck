@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import fetch from "node-fetch";
 
-export async function GET() {
+export const dynamic = "force-dynamic";
+
+export async function GET(request) {
   try {
     const fileUrl = `https://develop.sonduckfilm.com/wp-content/uploads/woocommerce_uploads/2022/03/53-TimerProPack-DownloadLink.pdf`;
 
@@ -14,7 +15,7 @@ export async function GET() {
     });
 
     if (!fileResponse.ok) {
-      throw new Error(`Failed to download file: ${fileResponse.statusText}`);
+      throw new Error(`Failed to download file: ${fileResponse.status} ${fileResponse.statusText}`);
     }
 
     const arrayBuffer = await fileResponse.arrayBuffer();
@@ -28,7 +29,7 @@ export async function GET() {
       },
     });
   } catch (err) {
-    console.error(err);
+    console.error(`Error fetching file:`, err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
