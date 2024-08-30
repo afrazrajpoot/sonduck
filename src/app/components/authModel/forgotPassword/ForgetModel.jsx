@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
@@ -20,38 +19,39 @@ export default function ForgetModel() {
       <Modal
         open={openForgetModel}
         onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+        aria-labelledby="forget-password-modal-title"
+        aria-describedby="forget-password-modal-description"
       >
         <div className="flex flex-col justify-center items-center h-screen">
           <div className="relative bg-white rounded-lg px-8 py-10 w-full md:h-fit h-full md:w-[450px] xl:w-[500px] shadow-lg flex flex-col">
             <div className="flex w-full justify-center">
-              <Image src="/img/Logo.png" alt="logo" width={180} height={180} />
+              <Image src="/img/Logo.png" alt="logo" width={180} height={180} priority />
             </div>
-            <h1 className="font-bold lg:text-xl sm:text-2xl text-center mt-5 mb-1">
+            <h1
+              id="forget-password-modal-title"
+              className="font-bold lg:text-xl sm:text-2xl text-center mt-5 mb-1"
+            >
               Forgot your password?
             </h1>
-            <p className="text-center text-sm mb-5">
-              We'll send you an email with a link to reset your password.
+            <p id="forget-password-modal-description" className="text-center text-sm mb-5">
+              We&apos;ll send you an email with a link to reset your password.
             </p>
             <ForgetForm />
             <Button
               className="absolute top-2 right-5 md:relative md:bottom-auto md:right-0"
               onClick={handleClose}
+              aria-label="Close modal"
               style={{
                 backgroundColor: "white",
                 border: "1px solid #ccc",
                 borderRadius: "50%",
+                minWidth: "40px",
                 width: "40px",
                 height: "40px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                padding: 0,
               }}
             >
-              <IconButton onClick={handleClose} aria-label="close modal">
-                <CloseIcon />
-              </IconButton>
+              <CloseIcon />
             </Button>
           </div>
         </div>

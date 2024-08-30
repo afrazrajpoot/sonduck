@@ -71,10 +71,10 @@ const Page = ({ params: { slug } }) => {
         </h1>
         <p className="font-bold lg:text-[1vw] text-[3.5vw] sm:text-[2.5vw]">
           {slug} is a way to protect yourself financially from unforeseen templates. It can help you
-          pay for medical expenses, repair your car after an accident, or replace your home if it's
-          destroyed by a fire. But with so many different types of Motion Graphic available, it can
-          be tough to know where to start. Here are some tips on how to choose the right Motion
-          Graphic for you:
+          pay for medical expenses, repair your car after an accident, or replace your home if
+          it&apos;s destroyed by a fire. But with so many different types of Motion Graphic
+          available, it can be tough to know where to start. Here are some tips on how to choose the
+          right Motion Graphic for you:
         </p>
 
         <div className="flex flex-col gap-[0.2vw]">
