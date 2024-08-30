@@ -18,6 +18,7 @@ import Pagination from "./Common/Paggination";
 import SubscriptionPass from "./pagesComponents/landingpage/SubscriptionPass";
 import Bundles from "./pagesComponents/landingpage/Bundles";
 import Footer from "./Common/Footer/Footer";
+import Loading from "./Common/Loading";
 
 const Store = () => {
   const btnData = [
