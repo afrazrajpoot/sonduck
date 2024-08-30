@@ -1,18 +1,23 @@
 "use client";
 import { Button } from "@mui/material";
 import React, { useEffect, useState, useCallback, Suspense } from "react";
-import Pack from "../../components/Cards/Pack";
-import Pagination from "../../components/Common/Paggination";
-import SubscriptionPass from "../../components/pagesComponents/landingpage/SubscriptionPass";
-import Bundles from "../../components/pagesComponents/landingpage/Bundles";
+// import Pack from "../../components/Cards/Pack";
+// import Pagination from "../../components/Common/Paggination";
+// import SubscriptionPass from "../../components/pagesComponents/landingpage/SubscriptionPass";
+// import Bundles from "../../components/pagesComponents/landingpage/Bundles";
 import Link from "next/link";
-import Footer from "../../components/Common/Footer/Footer";
-import Loading from "../../components/Common/Loading";
+// import Footer from "../../components/Common/Footer/Footer";
+// import Loading from "../../components/Common/Loading";
 import { useGlobalContext } from "@/context/globalState";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { RiArrowUpDownLine } from "react-icons/ri";
 import { useNewsLetterEventsMutation } from "@/store/storeApi";
+import Pack from "./Cards/Pack";
+import Pagination from "./Common/Paggination";
+import SubscriptionPass from "./pagesComponents/landingpage/SubscriptionPass";
+import Bundles from "./pagesComponents/landingpage/Bundles";
+import Footer from "./Common/Footer/Footer";
 
 const Store = () => {
   const btnData = [
