@@ -1,14 +1,15 @@
 import { connection } from "@/dbConfig/dbConfig";
-import Subscription from "@/models/subscription";
+// import Subscription from "@/models/Subscription";
+import User from "@/models/User"; // Import the User model
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import Subscription from "@/models/subscription";
 
 connection();
 
 export async function POST(req) {
   try {
     const { id } = await req.json();
-    // Validate and convert the ID to ObjectId
     let objectId;
     try {
       objectId = new mongoose.Types.ObjectId(id);
@@ -16,13 +17,11 @@ export async function POST(req) {
       return NextResponse.json({ success: false, message: "Invalid ID format" }, { status: 400 });
     }
 
-    // Use findById directly with the ObjectId
     const subscription = await Subscription.findById(objectId);
     if (!subscription) {
       return NextResponse.json({ message: "Subscription not found" }, { status: 404 });
     }
 
-    // Populate the userId field
     const populatedSubscription = await Subscription.findById(objectId).populate("userId");
 
     return NextResponse.json(
