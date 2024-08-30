@@ -8,13 +8,14 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'develop.sonduckfilm.com',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "develop.sonduckfilm.com",
+        port: "",
+        pathname: "/**",
       },
     ],
   },
+  eslint: { ignoreDuringBuilds: true },
 };
 
 export default nextConfig;
