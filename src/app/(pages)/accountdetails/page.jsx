@@ -4,7 +4,7 @@ import Sidebar from "../../components/Common/Sidebar/Sidebar";
 import AccountForm from "../../components/authModel/register/AccountForm";
 import CreatePasswordForm from "../../components/authModel/register/CreatePasswordForm";
 
-const page = () => {
+const Page = () => {
   return (
     <main className="bg-[#FAFAFA]  overflow-x-hidden overflow-y-hidden">
       <Sidebar />
@@ -35,4 +35,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

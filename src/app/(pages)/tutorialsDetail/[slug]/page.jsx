@@ -17,7 +17,7 @@ import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 const Page = ({ params: { slug } }) => {
   const ref = useRef(null);
 
-  const [postComment, {isLoading }] = usePostCommentMutation();
+  const [postComment, { isLoading }] = usePostCommentMutation();
 
   const [author, setAuthor] = useState({});
   const [products, setProducts] = useState([]);
@@ -102,12 +102,21 @@ const Page = ({ params: { slug } }) => {
   );
 
   const settings = {
-    className: "active", centerMode: true, focusOnSelect: true,
-    centerPadding: 0, dots: false, infinite: true,
-    speed: 500, arrows: true, slidesToShow: 3, centerMode: true,
-    slidesToScroll: 1, nextArrow: <CustomPrevArrow />, prevArrow: <CustomNextArrow />,
+    className: "active",
+    centerMode: true,
+    focusOnSelect: true,
+    centerPadding: 0,
+    dots: false,
+    infinite: true,
+    speed: 500,
+    arrows: true,
+    slidesToShow: 3,
+    centerMode: true,
+    slidesToScroll: 1,
+    nextArrow: <CustomPrevArrow />,
+    prevArrow: <CustomNextArrow />,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2, slidesToScroll: 1, infinite: true }, },
+      { breakpoint: 1024, settings: { slidesToShow: 2, slidesToScroll: 1, infinite: true } },
       { breakpoint: 1000, settings: { slidesToShow: 2, slidesToScroll: 1 } },
       { breakpoint: 640, settings: { slidesToShow: 1, slidesToScroll: 1 } },
     ],
@@ -159,14 +168,14 @@ const Page = ({ params: { slug } }) => {
       ref.current.value = "";
     }
   }
- 
+
   const handleDownloadFile = (url) => {
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", "");
     document.body.appendChild(link);
     link.click();
-  }
+  };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -205,7 +214,8 @@ const Page = ({ params: { slug } }) => {
             </p>
           </article>
           {extractedContent?.downloadLink ? (
-            <div onClick={() => handleDownloadFile(extractedContent?.downloadLink)}
+            <div
+              onClick={() => handleDownloadFile(extractedContent?.downloadLink)}
               // href={extractedContent.downloadLink}
               className="bg-[#FF689A] mt-[3vw] px-6 py-2 text-[1.5vw] font-bold text-white rounded-lg flex items-center"
             >
@@ -217,7 +227,9 @@ const Page = ({ params: { slug } }) => {
               <p className="hover:underline text-[4vw] sm:text-[2vw] lg:text-[1vw]">Download</p>
             </div>
           ) : (
-            <p className="text-gray-500 text-[4vw] sm:text-[2vw] lg:text-[1vw]">No download link available</p>
+            <p className="text-gray-500 text-[4vw] sm:text-[2vw] lg:text-[1vw]">
+              No download link available
+            </p>
           )}
           <article className="mt-[3vw]">
             <h1 className="text-[#FF689A] font-medium text-[5vw] lg:text-[1.5vw]">Related Posts</h1>

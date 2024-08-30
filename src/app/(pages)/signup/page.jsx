@@ -6,7 +6,7 @@ import ForgetModel from "../../components/authModel/forgotPassword/ForgetModel";
 import OtpModel from "../../components/authModel/otp/OtpModel";
 import ResetModel from "../../components/authModel/resetModal/ResetModel";
 
-const page = () => {
+const Page = () => {
   return (
     <main className="absolute top-[8vw]">
       <SignupModel />
@@ -18,4 +18,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

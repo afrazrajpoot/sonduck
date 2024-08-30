@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React from "react";
 
-const page = () => {
+const Page = () => {
   const linksData = [
     {
       url: "/affiliates",
@@ -45,8 +45,7 @@ const page = () => {
     },
     {
       title: "Referral URL Generator",
-      desc1:
-        "Enter any URL from this website in the form below to generate a referral link!",
+      desc1: "Enter any URL from this website in the form below to generate a referral link!",
     },
   ];
 
@@ -56,8 +55,7 @@ const page = () => {
         <h1 className="text-[2vw]">SONDUCK AFFILIATES</h1>
         <p className="text-[3vw] font-bold">BECOME A SONDUCK PARTNER</p>
         <p className="text-[1.5vw]">
-          Join our affiliate community and earn money through referring
-          individual digital assets.
+          Join our affiliate community and earn money through referring individual digital assets.
         </p>
       </section>
       <section className="flex p-[1.5vw] mt-[15vw]">
@@ -76,8 +74,8 @@ const page = () => {
       </section>
       <section className="flex flex-col items-center gap-[3vw]">
         <p className="text-[1.3vw]">
-          Sign up below and starting selling now! If you fit our ideal
-          affiliate, we will send you any product on our site for free.
+          Sign up below and starting selling now! If you fit our ideal affiliate, we will send you
+          any product on our site for free.
         </p>
 
         <iframe
@@ -105,9 +103,7 @@ const page = () => {
           <div className="flex gap-[2vw] flex-col">
             {affiliateData?.map((ele, ind) => (
               <div key={ind} className="">
-                <h2 className="text-[1.5vw] font-medium   text-pink-500">
-                  {ele.title}
-                </h2>
+                <h2 className="text-[1.5vw] font-medium   text-pink-500">{ele.title}</h2>
                 <div className="mt-[1vw]">
                   <p className="text-[1.2vw]">{ele.desc1}</p>
                   <p className="text-[1.2vw]">{ele.desc2}</p>
@@ -117,10 +113,7 @@ const page = () => {
           </div>
         </article>
       </section>
-      <form
-        action=""
-        className="w-full max-w-[93vw] mt-[2vw] m-auto flex flex-col gap-[1.5vw]"
-      >
+      <form action="" className="w-full max-w-[93vw] mt-[2vw] m-auto flex flex-col gap-[1.5vw]">
         <div>
           <label htmlFor="" className="text-[1.3vw] ">
             Page URL
@@ -154,4 +147,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

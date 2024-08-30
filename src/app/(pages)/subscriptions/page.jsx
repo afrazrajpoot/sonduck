@@ -23,7 +23,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-const page = () => {
+const Page = () => {
   const [id, setId] = useState(null); // Initialize with null
   const { data, isLoading } = useGetSubscriptionDataByIdQuery(id, {
     skip: !id,
@@ -231,4 +231,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -68,7 +68,9 @@ const Page = () => {
           {loading ? (
             <div className="w-full flex flex-col items-center justify-center min-h-[100vw] sm:min-h-[60vw] lg:min-h-[30vw]">
               <Loading />
-              <p className="text-[#FF387A] mt-[3vw] md:mt-[1vw] text-center font-bold lg:text-[1vw] text-[3.5vw] sm:text-[2vw]">please wait while we fetch your downloads</p>
+              <p className="text-[#FF387A] mt-[3vw] md:mt-[1vw] text-center font-bold lg:text-[1vw] text-[3.5vw] sm:text-[2vw]">
+                please wait while we fetch your downloads
+              </p>
             </div>
           ) : fetchedPersonalOrders?.data && fetchedPersonalOrders?.data.length > 0 ? (
             <div className="flex flex-col lg:grid lg:grid-cols-3 sm:flex-row lg:gap-[1vw] gap-[5vw] items-center">
