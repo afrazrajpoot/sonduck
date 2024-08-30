@@ -1,6 +1,7 @@
 // models/Subscription.js
 import mongoose from "mongoose";
-import "./User"; // Import the User model
+// import "./User"; // Import the User model
+import "./userModel";
 const subscriptionSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
