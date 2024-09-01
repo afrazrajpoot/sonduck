@@ -4,7 +4,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const storeApi = createApi({
   reducerPath: "storeApi",
   // baseQuery: fetchBaseQuery({ baseUrl: `https://sonduck-if7z.vercel.app` }),
-  baseQuery: fetchBaseQuery({ baseUrl: `http://localhost:3000` }),
+  baseQuery: fetchBaseQuery({ baseUrl: `https://sonduck-94hh-11tdcelai-musa2.vercel.app` }),
+  // baseQuery: fetchBaseQuery({ baseUrl: `http://localhost:3000` }),
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (data) => ({
