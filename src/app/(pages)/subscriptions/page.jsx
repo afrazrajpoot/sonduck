@@ -1,15 +1,18 @@
 "use client";
 
-import Sidebar from "../../components/Common/Sidebar/Sidebar";
-import LinearProgress, { linearProgressClasses } from "@mui/material/LinearProgress";
-import { styled } from "@mui/material/styles";
-import { useEffect, useState } from "react";
-import { useDeleteSubscriptionMutation, useGetSubscriptionDataByIdQuery } from "@/store/storeApi";
-import { toast } from "sonner";
-import Loading from "@/app/components/Common/Loading";
-import jsPDF from "jspdf";
+import { useEffect, useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { RiBox3Line } from "react-icons/ri";
+import { toast } from "sonner";
+import { useDeleteSubscriptionMutation, useGetSubscriptionDataByIdQuery } from "@/store/storeApi";
+import LinearProgress, { linearProgressClasses } from "@mui/material/LinearProgress";
+import { styled } from "@mui/material/styles";
+
+// Dynamically import heavy components
+const Sidebar = dynamic(() => import("../../components/Common/Sidebar/Sidebar"), { ssr: false });
+const Loading = dynamic(() => import("@/app/components/Common/Loading"), { ssr: false });
+const jsPDF = dynamic(() => import("jspdf"), { ssr: false });
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -23,19 +26,56 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
+const PDFDownloadButton = ({ data }) => {
+  const handleDownload = useCallback(() => {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.addImage("/img/Logo.png", "PNG", 10, 10, 45, 15);
+    doc.text("Invoice", 105, 20, null, null, "center");
+    doc.setLineWidth(0.5);
+    doc.line(10, 25, 200, 25);
+    doc.setFontSize(12);
+    const startX = 20;
+    const startY = 35;
+    const lineSpacing = 10;
+    const details = [
+      `User Name: ${data.username || ""}`,
+      `Price: $${data.price || ""}`,
+      `Plan Type: ${data.planType || ""}`,
+      `Email: ${data.email || ""}`,
+    ];
+    details.forEach((detail, index) => {
+      doc.text(detail, startX, startY + index * lineSpacing);
+    });
+    doc.save("invoice.pdf");
+  }, [data]);
+
+  return (
+    <p
+      onClick={handleDownload}
+      className="lg:text-[1vw] text-[3vw] sm:text-[2.5vw] text-[#FF689A] ml-[0.5vw] hover:cursor-pointer font-medium"
+    >
+      Download invoice
+    </p>
+  );
+};
+
 const Page = () => {
-  const [id, setId] = useState(null); // Initialize with null
+  const [id, setId] = useState(null);
   const { data, isLoading } = useGetSubscriptionDataByIdQuery(id, {
     skip: !id,
   });
 
-  const startDate = new Date(data?.subscription?.startDate);
-  const formattedTime = startDate.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
   const [deletePlan] = useDeleteSubscriptionMutation();
-  async function cancelPlan() {
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.subscriptionId) {
+      setId(user.subscriptionId);
+    }
+  }, []);
+
+  const cancelPlan = async () => {
     if (!id) {
       toast.error("No plan selected to delete.", {
         position: "top-right",
@@ -43,68 +83,41 @@ const Page = () => {
       });
       return;
     }
-    let confirm;
-    confirm = window.confirm("Are you sure you want to delete this plan?");
-    try {
-      if (confirm) {
+    if (window.confirm("Are you sure you want to delete this plan?")) {
+      try {
         await deletePlan(id);
         toast.success("Plan deleted successfully!", {
           style: { marginTop: 40 },
         });
+        localStorage.removeItem("subscriptionId");
+        window.location.reload();
+      } catch (err) {
+        toast.error("Failed to delete plan. Please try again later.", {
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          style: { marginTop: 40 },
+        });
       }
-      localStorage.removeItem("subscriptionId");
-      window.location.reload();
-    } catch (err) {
-      toast.error("Failed to delete plan. Please try again later.", {
-        autoClose: 5000,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        style: { marginTop: 40 },
-      });
     }
-  }
-  const handleDownload = () => {
-    const doc = new jsPDF();
-
-    // Add a title
-    doc.setFontSize(18);
-    doc.addImage("/img/Logo.png", "PNG", 10, 10, 45, 15);
-    doc.text("Invoice", 105, 20, null, null, "center");
-    // Add a horizontal line
-    doc.setLineWidth(0.5);
-    doc.line(10, 25, 200, 25);
-    // Set font size for the details
-    doc.setFontSize(12);
-    // Define the start positions
-    const startX = 20;
-    const startY = 35;
-    const lineSpacing = 10;
-    // Add the details
-    const details = [
-      `User Name: ${data?.subscription?.username || ""}`,
-      `Price: $${data?.subscription?.price || ""}`,
-      `Plan Type: ${data?.subscription?.planType || ""}`,
-      `Email: ${data?.subscription?.email || ""}`,
-    ];
-    details.forEach((detail, index) => {
-      doc.text(detail, startX, startY + index * lineSpacing);
-    });
-    doc.save("invoice.pdf");
   };
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.subscriptionId) {
-      setId(user?.subscriptionId);
-    }
-  }, []);
+  if (isLoading) return <Loading />;
+
+  const startDate = data?.subscription?.startDate ? new Date(data.subscription.startDate) : null;
+  const formattedTime = startDate
+    ? startDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
 
   return (
-    <main className="bg-[#FAFAFA] ">
+    <main className="bg-[#FAFAFA]">
       <Sidebar />
-      <div className=" w-full lg:max-w-[59vw] max-w-[80vw] m-auto lg:ml-[30vw] lg:translate-y-[6vw] translate-y-[25vw] sm:translate-y-[10vw]">
+      <div className="w-full lg:max-w-[59vw] max-w-[80vw] m-auto lg:ml-[30vw] lg:translate-y-[6vw] translate-y-[25vw] sm:translate-y-[10vw]">
         <h1 className="font-bold lg:text-[1.5vw] text-[4vw] sm:text-[3vw]">Billing Status</h1>
         <aside className="w-full bg-white mt-[2vw] shadow-md rounded-[10px] p-5">
           <section className="w-full border border-[#EEEEEE] rounded-[6px] p-5">
@@ -116,9 +129,9 @@ const Page = () => {
                   </span>
                   <section>
                     <h1 className="font-semibold lg:text-[1.5vw] text-[3.2vw] sm:text-[2.8vw] ml-[0.5vw]">
-                      {!isLoading && !data?.subscription?.planType
+                      {!data?.subscription?.planType
                         ? "No plan subscribed "
-                        : data?.subscription?.planType}
+                        : data.subscription.planType}
                     </h1>
                     <p className="lg:text-[1vw] text-[2.6vw] sm:text-[2.5vw] ml-[0.5vw] text-gray-500">
                       Current Plan
@@ -128,12 +141,12 @@ const Page = () => {
                 <aside className="flex flex-col sm:flex-row justify-center my-[2vw] items-center gap-6">
                   <button
                     onClick={cancelPlan}
-                    className="text-center  rounded-md text-[#ED544E] hover:bg-white px-4 py-2 font-semibold whitespace-nowrap"
+                    className="text-center rounded-md text-[#ED544E] hover:bg-white px-4 py-2 font-semibold whitespace-nowrap"
                   >
                     Cancel Plan
                   </button>
                   <Link href="/subscription" className="w-full block">
-                    <button className="hover:bg-[#FF689A] hover:text-white text-center rounded-md text-[#FF689A]  border border-[#FF689A] px-4 py-2 font-semibold whitespace-nowrap">
+                    <button className="hover:bg-[#FF689A] hover:text-white text-center rounded-md text-[#FF689A] border border-[#FF689A] px-4 py-2 font-semibold whitespace-nowrap">
                       {!data ? "Subscribe" : "Change Plan"}
                     </button>
                   </Link>
@@ -144,14 +157,14 @@ const Page = () => {
                   <BorderLinearProgress
                     variant="determinate"
                     value={
-                      data?.subscription?.planType === "Basic" ||
-                      data?.subscription?.planType === "MONTHLY" ||
-                      data?.subscription?.planType === "Regular"
+                      data.subscription.planType === "Basic" ||
+                      data.subscription.planType === "MONTHLY" ||
+                      data.subscription.planType === "Regular"
                         ? 30
-                        : data?.subscription?.planType === "Premium"
+                        : data.subscription.planType === "Premium"
                         ? 70
-                        : data?.subscription?.planType === "40 PACK BUNDLE" ||
-                          data?.subscription?.planType === "ANNUAL"
+                        : data.subscription.planType === "40 PACK BUNDLE" ||
+                          data.subscription.planType === "ANNUAL"
                         ? 100
                         : 0
                     }
@@ -178,19 +191,11 @@ const Page = () => {
                 <aside className="p-[2.2vw] sm:p-[1.2vw] rounded-[1.2vw] bg-[#ffff] m-[2.5vw] sm:m-[0.5vw] w-full">
                   <p className="text-[14px] text-gray-500">Quota Left</p>
                   <h1 className="text-[20px] font-semibold text-[#151515]">
-                    {isLoading ? (
-                      <Loading />
-                    ) : !data?.subscription?.downloadLimit ? (
-                      0
-                    ) : data?.subscription?.downloadLimit > 0 ? (
-                      data?.subscription?.downloadLimit === 10000 ? (
-                        "No limit"
-                      ) : (
-                        data?.subscription?.downloadLimit
-                      )
-                    ) : (
-                      0
-                    )}
+                    {!data?.subscription?.downloadLimit
+                      ? 0
+                      : data.subscription.downloadLimit === 10000
+                      ? "No limit"
+                      : data.subscription.downloadLimit}
                   </h1>
                 </aside>
               </article>
@@ -206,20 +211,15 @@ const Page = () => {
                 <div className="flex items-center my-4">
                   <section className="text-[#7F7F7F]">
                     <h1 className="lg:text-[1vw] text-[3vw] sm:text-[2vw]">
-                      {isLoading ? "00/00/00" : startDate.toLocaleDateString()}
+                      {startDate.toLocaleDateString()}
                     </h1>
                     <p className="lg:text-[1vw] text-[3vw] sm:text-[2.5vw]">{formattedTime}</p>
                   </section>
                   <section className="ml-[2vw]">
                     <h1 className="font-semimedium lg:text-[1.1vw] text-[3vw] sm:text-[2.2vw] ml-[0.5vw]">
-                      ${data?.subscription?.price}
+                      ${data.subscription.price}
                     </h1>
-                    <p
-                      onClick={handleDownload}
-                      className="lg:text-[1vw] text-[3vw] sm:text-[2.5vw] text-[#FF689A] ml-[0.5vw] hover:cursor-pointer font-medium"
-                    >
-                      Download invoice
-                    </p>
+                    <PDFDownloadButton data={data.subscription} />
                   </section>
                 </div>
               </section>
