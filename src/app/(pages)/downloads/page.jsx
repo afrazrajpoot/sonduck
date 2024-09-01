@@ -1,11 +1,10 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-// import Sidebar from "../components/Common/Sidebar/Sidebar";
 import Sidebar from "@/app/components/Common/Sidebar/Sidebar";
 import { useGlobalContext } from "@/context/globalState";
 import Link from "next/link";
-// import Loading from "../components/Common/Loading";
 import Loading from "@/app/components/Common/Loading";
 
 const DownloadProduct = ({ img, desc, productId, orderKey, downloadKey, email }) => {
@@ -38,25 +37,41 @@ const Page = () => {
   const [fetchedPersonalOrders, setFetchedPersonalOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchOrders = async (page = 1) => {
+    setLoading(true);
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+      try {
+        const data = await fetchWooCommerceData(
+          `wc/v3/orders/?customer=${customerID}&page=${page}`
+        );
+        setFetchedPersonalOrders(data);
+        break; // Exit loop on success
+      } catch (error) {
+        attempts += 1;
+        console.error(`Attempt ${attempts}: Error fetching orders:`, error);
+        if (attempts >= maxAttempts) {
+          console.error("Max attempts reached. Could not fetch orders.");
+          break;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000 * attempts)); // Exponential backoff
+      }
+    }
+
+    setLoading(false);
+    setPaymentActive(false);
+  };
+
   useEffect(() => {
     if (customerID && customerID !== "null") {
-      const fetchOrders = async () => {
-        setLoading(true);
-        try {
-          const data = await fetchWooCommerceData(`wc/v3/orders/?customer=${customerID}`);
-          setFetchedPersonalOrders(data);
-        } catch (error) {
-          console.error("Error fetching orders:", error);
-        } finally {
-          setLoading(false);
-          setPaymentActive(false);
-        }
-      };
       fetchOrders();
     } else {
       setLoading(false);
     }
   }, [customerID, state]);
+
   return (
     <main className="bg-[#FAFAFA] w-full max-h-[500vh]">
       <Sidebar />
