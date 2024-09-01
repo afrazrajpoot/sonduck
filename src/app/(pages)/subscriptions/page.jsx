@@ -24,23 +24,18 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 const Page = () => {
-  const [id, setId] = useState(null);
-
+  const [id, setId] = useState(null); // Initialize with null
   const { data, isLoading } = useGetSubscriptionDataByIdQuery(id, {
     skip: !id,
   });
 
-  const startDate = data ? new Date(data.subscription.startDate) : null;
-  const formattedTime = startDate
-    ? startDate.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "";
-
+  const startDate = new Date(data?.subscription?.startDate);
+  const formattedTime = startDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   const [deletePlan] = useDeleteSubscriptionMutation();
-
-  const cancelPlan = async () => {
+  async function cancelPlan() {
     if (!id) {
       toast.error("No plan selected to delete.", {
         position: "top-right",
@@ -48,15 +43,15 @@ const Page = () => {
       });
       return;
     }
-
-    const confirmDelete = window.confirm("Are you sure you want to delete this plan?");
-    if (!confirmDelete) return;
-
+    let confirm;
+    confirm = window.confirm("Are you sure you want to delete this plan?");
     try {
-      await deletePlan(id).unwrap();
-      toast.success("Plan deleted successfully!", {
-        style: { marginTop: 40 },
-      });
+      if (confirm) {
+        await deletePlan(id);
+        toast.success("Plan deleted successfully!", {
+          style: { marginTop: 40 },
+        });
+      }
       localStorage.removeItem("subscriptionId");
       window.location.reload();
     } catch (err) {
@@ -69,46 +64,47 @@ const Page = () => {
         style: { marginTop: 40 },
       });
     }
-  };
-
+  }
   const handleDownload = () => {
     const doc = new jsPDF();
 
+    // Add a title
     doc.setFontSize(18);
     doc.addImage("/img/Logo.png", "PNG", 10, 10, 45, 15);
     doc.text("Invoice", 105, 20, null, null, "center");
+    // Add a horizontal line
     doc.setLineWidth(0.5);
     doc.line(10, 25, 200, 25);
-
+    // Set font size for the details
     doc.setFontSize(12);
+    // Define the start positions
     const startX = 20;
     const startY = 35;
     const lineSpacing = 10;
+    // Add the details
     const details = [
       `User Name: ${data?.subscription?.username || ""}`,
       `Price: $${data?.subscription?.price || ""}`,
       `Plan Type: ${data?.subscription?.planType || ""}`,
       `Email: ${data?.subscription?.email || ""}`,
     ];
-
     details.forEach((detail, index) => {
       doc.text(detail, startX, startY + index * lineSpacing);
     });
-
     doc.save("invoice.pdf");
   };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user?.subscriptionId) {
-      setId(user.subscriptionId);
+      setId(user?.subscriptionId);
     }
   }, []);
 
   return (
-    <main className="bg-[#FAFAFA]">
+    <main className="bg-[#FAFAFA] ">
       <Sidebar />
-      <div className="w-full lg:max-w-[59vw] max-w-[80vw] m-auto lg:ml-[30vw] lg:translate-y-[6vw] translate-y-[25vw] sm:translate-y-[10vw]">
+      <div className=" w-full lg:max-w-[59vw] max-w-[80vw] m-auto lg:ml-[30vw] lg:translate-y-[6vw] translate-y-[25vw] sm:translate-y-[10vw]">
         <h1 className="font-bold lg:text-[1.5vw] text-[4vw] sm:text-[3vw]">Billing Status</h1>
         <aside className="w-full bg-white mt-[2vw] shadow-md rounded-[10px] p-5">
           <section className="w-full border border-[#EEEEEE] rounded-[6px] p-5">
@@ -121,7 +117,7 @@ const Page = () => {
                   <section>
                     <h1 className="font-semibold lg:text-[1.5vw] text-[3.2vw] sm:text-[2.8vw] ml-[0.5vw]">
                       {!isLoading && !data?.subscription?.planType
-                        ? "No plan subscribed"
+                        ? "No plan subscribed "
                         : data?.subscription?.planType}
                     </h1>
                     <p className="lg:text-[1vw] text-[2.6vw] sm:text-[2.5vw] ml-[0.5vw] text-gray-500">
@@ -132,12 +128,12 @@ const Page = () => {
                 <aside className="flex flex-col sm:flex-row justify-center my-[2vw] items-center gap-6">
                   <button
                     onClick={cancelPlan}
-                    className="text-center rounded-md text-[#ED544E] hover:bg-white px-4 py-2 font-semibold whitespace-nowrap"
+                    className="text-center  rounded-md text-[#ED544E] hover:bg-white px-4 py-2 font-semibold whitespace-nowrap"
                   >
                     Cancel Plan
                   </button>
                   <Link href="/subscription" className="w-full block">
-                    <button className="hover:bg-[#FF689A] hover:text-white text-center rounded-md text-[#FF689A] border border-[#FF689A] px-4 py-2 font-semibold whitespace-nowrap">
+                    <button className="hover:bg-[#FF689A] hover:text-white text-center rounded-md text-[#FF689A]  border border-[#FF689A] px-4 py-2 font-semibold whitespace-nowrap">
                       {!data ? "Subscribe" : "Change Plan"}
                     </button>
                   </Link>
@@ -208,31 +204,21 @@ const Page = () => {
                   Billing History
                 </h1>
                 <div className="flex items-center my-4">
-                  <section className="flex-1 text-[16px]">
-                    <p className="text-[#333333] font-semibold">Total Payment</p>
-                    <p className="text-[16px]">${data?.subscription?.price || 0}</p>
+                  <section className="text-[#7F7F7F]">
+                    <h1 className="lg:text-[1vw] text-[3vw] sm:text-[2vw]">
+                      {isLoading ? "00/00/00" : startDate.toLocaleDateString()}
+                    </h1>
+                    <p className="lg:text-[1vw] text-[3vw] sm:text-[2.5vw]">{formattedTime}</p>
                   </section>
-                  <section className="flex-1 text-[16px]">
-                    <p className="text-[#333333] font-semibold">Plan</p>
-                    <p className="text-[16px]">{data?.subscription?.planType || "N/A"}</p>
-                  </section>
-                  <section className="flex-1 text-[16px]">
-                    <p className="text-[#333333] font-semibold">Start Date</p>
-                    <p className="text-[16px]">{startDate?.toLocaleDateString() || "N/A"}</p>
-                  </section>
-                  <section className="flex-1 text-[16px]">
-                    <p className="text-[#333333] font-semibold">Start Time</p>
-                    <p className="text-[16px]">{formattedTime || "N/A"}</p>
-                  </section>
-                  <section className="flex-1 text-[16px]">
-                    <p className="text-[#333333] font-semibold">Actions</p>
-                    <p className="text-[16px]">
-                      <button
-                        onClick={handleDownload}
-                        className="bg-[#FF689A] text-white px-4 py-2 rounded-md"
-                      >
-                        Download Invoice
-                      </button>
+                  <section className="ml-[2vw]">
+                    <h1 className="font-semimedium lg:text-[1.1vw] text-[3vw] sm:text-[2.2vw] ml-[0.5vw]">
+                      ${data?.subscription?.price}
+                    </h1>
+                    <p
+                      onClick={handleDownload}
+                      className="lg:text-[1vw] text-[3vw] sm:text-[2.5vw] text-[#FF689A] ml-[0.5vw] hover:cursor-pointer font-medium"
+                    >
+                      Download invoice
                     </p>
                   </section>
                 </div>
