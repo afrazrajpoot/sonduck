@@ -17,15 +17,17 @@ const nextConfig = {
   },
   eslint: { ignoreDuringBuilds: true },
 
-  // Add custom headers to handle CORS
+  // Add custom headers to handle CORS for all routes
   async headers() {
     return [
       {
-        // matching all API routes
-        source: "/api/:path*",
+        source: "/(.*)", // Match all routes
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://sonduck-94hh-git-main-musa2.vercel.app",
+          }, // Replace with your actual frontend domain
           { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
           {
             key: "Access-Control-Allow-Headers",
