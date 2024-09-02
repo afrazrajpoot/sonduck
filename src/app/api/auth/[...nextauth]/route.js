@@ -21,8 +21,8 @@ const handler = NextAuth({
       },
     }),
     FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+      clientId: process.env.FACEBOOK_CLIENT_ID || "1213905236319497",
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "63d67984f9441fdbbfb35eb2078cf1e6",
     }),
   ],
   callbacks: {
