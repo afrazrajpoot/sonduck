@@ -6,7 +6,7 @@ import CreatePasswordForm from "../../components/authModel/register/CreatePasswo
 
 const Page = () => {
   return (
-    <main className="bg-[#FAFAFA]  overflow-x-hidden overflow-y-hidden pb-[3vw]">
+    <main className="bg-[#FAFAFA]  overflow-x-hidden overflow-y-hidden ">
       <Sidebar />
       <section className=" rounded-lg w-full  lg:max-w-[50vw] max-w-[90vw] translate-y-[5vw] lg:translate-x-[26vw] translate-x-[5vw] p-[2vw] lg:p-[1vw]">
         <h1 className="font-bold text-[6vw] sm:text-[3vw] ml-[4vw] lg:text-[2vw] lg:ml-[0vw] sm:ml-[20vw]   translate-y-[13vw] lg:translate-y-[0.5vw] sm:translate-y-[2vw] translate-x-[-8vw] sm:translate-x-[-21vw]  lg:translate-x-0 ">
@@ -17,7 +17,7 @@ const Page = () => {
             className=" p-[2vw] sm:p-[1vw] bg-white border-[1px]  border-[#F5F5F5] mt-[1vw] sm:translate-y-[6vw] translate-y-[15vw]
         lg:translate-y-0 rounded-lg lg:w-[30vw]  w-[93vw] sm:w-[90vw] ml-[-4.8vw] sm:ml-[-13vw] lg:ml-[0vw]  "
           >
-            <div className="mt-[1vw]">
+            <div className="mt-[1vw] mb-[5vw]">
               <AccountForm />
             </div>
           </div>
