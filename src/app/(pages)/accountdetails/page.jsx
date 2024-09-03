@@ -6,7 +6,7 @@ import CreatePasswordForm from "../../components/authModel/register/CreatePasswo
 
 const Page = () => {
   return (
-    <main className="bg-[#FAFAFA]  overflow-x-hidden overflow-y-hidden">
+    <main className="bg-[#FAFAFA]  overflow-x-hidden overflow-y-hidden pb-[3vw]">
       <Sidebar />
       <section className=" rounded-lg w-full  lg:max-w-[50vw] max-w-[90vw] translate-y-[5vw] lg:translate-x-[26vw] translate-x-[5vw] p-[2vw] lg:p-[1vw]">
         <h1 className="font-bold text-[6vw] sm:text-[3vw] ml-[4vw] lg:text-[2vw] lg:ml-[0vw] sm:ml-[20vw]   translate-y-[13vw] lg:translate-y-[0.5vw] sm:translate-y-[2vw] translate-x-[-8vw] sm:translate-x-[-21vw]  lg:translate-x-0 ">
