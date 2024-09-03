@@ -21,8 +21,8 @@ const handler = NextAuth({
       },
     }),
     FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID, // Replace with your actual Facebook app ID
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+      clientId: "854319706666419", // Replace with your actual Facebook app ID
+      clientSecret: "d3d9a4ac77905090d2aeb5d8db1a2584",
     }),
   ],
   callbacks: {
